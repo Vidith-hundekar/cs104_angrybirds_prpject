@@ -16,8 +16,8 @@ sling=pygame.transform.scale(sling,(75,75))
 
 #red
 red_b=Bird(name="RED",x=200,y=800)
-red_x=red_b.position[0]
-red_y=red_b.position[1]
+red_x=200
+red_y=800
 red=pygame.image.load('./resources/images/red-bird.png')
 red=pygame.transform.scale(red,(50,50))
 
