@@ -6,15 +6,15 @@ run=True
 while run:
     mouse_pos = pygame.mouse.get_pos()
     screen.blit(background,(0,0))
-    screen.blit(sling,(1200,825))
-    screen.blit(sling,(200,825))
+    screen.blit(sling,(int(((14/15)-(1/20))*(screen_wid)),int((11/12)*(screen_height))))
+    screen.blit(sling,(int((1/15)*(screen_wid)),int((11/12)*(screen_height))))
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
             print("Mouse released at:", pygame.mouse.get_pos())
         if event.type == pygame.KEYDOWN:             
             if event.key == pygame.K_ESCAPE:           
                 run = False
-        if mouse_pos[0]>150 and mouse_pos[0]<250 and mouse_pos[1]>750 and  mouse_pos[1] <900:  ##change it later
+        if mouse_pos[0] > screen_wid/30 and mouse_pos[0] < screen_wid*2/15 and mouse_pos[1] > (7/9)*(screen_height) and  mouse_pos[1] < screen_height: 
             print("y")
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # print("hi")
@@ -33,10 +33,10 @@ while run:
                 
     if launch_state:   
         t=time.time()-start_time
-        if(red_y>860):
+        if(red_y>screen_height - ((y/14)*4/5)):
             if(Vy>0):
                 Vy*=-0.8
-        if (red_x<=-10 and Vx <0 ) or (red_x >=1460 and Vx>0):
+        if (red_x<=-(x/150) and Vx <0 ) or (red_x >= screen_wid -((x/30)*4/5) and Vx>0):
             Vx*=-0.8
         red_x,red_y,Vx,Vy=launch("RED",Vx,Vy,red_x,red_y,t)
     screen.blit(red,(red_x,red_y))

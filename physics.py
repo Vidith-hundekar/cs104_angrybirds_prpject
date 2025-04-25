@@ -11,6 +11,4 @@ def launch (name,Vx,Vy,red_x,red_y,t):
         red_y+=rel_y
         Vy+=A*del_t
         T1=t
-        # print(red_b.position[0])
-        print(del_t)
         return red_x,red_y,Vx,Vy
