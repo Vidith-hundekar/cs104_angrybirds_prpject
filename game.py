@@ -35,7 +35,7 @@ ui_y_p1=150
 text1=""
 
 #player2
-p_2=False
+p_2=True
 ui_x_p2=900
 ui_y_p2=150
 text2=""
@@ -48,8 +48,12 @@ sling_2_pos=int((1/15)*(screen_wid)),int((11/12)*(screen_height))
 
 #red
 Visible=False
-slin_bird_x=int((1/15)*(screen_wid))
-slin_bird_y=int((8/9)*(screen_height))
+slin1_bird_x=int((1/15)*(screen_wid))
+slin1_bird_y=int((8/9)*(screen_height))
+slin2_bird_x=int((89/100)*(screen_wid))
+slin2_bird_y=int((8/9)*(screen_height))
+
+
 
 #launch
 launch_state=False
@@ -63,3 +67,19 @@ y_lau_a=0    #after launch
 #random generation
 rand_birds_p1=["RED","CHUCKS","BOMB","BLUE"]
 random.shuffle(rand_birds_p1)
+#random generation
+rand_birds_p2=["RED","CHUCKS","BOMB","BLUE"]
+random.shuffle(rand_birds_p2)
+# Pre-create bird objects outside the main loop
+bird_sprites_p1 = []
+for i in range(4):
+    bird_sprites_p1.append(None)
+    
+bird_sprites_p2 = []
+for i in range(4):
+    bird_sprites_p2.append(None)
+
+# Track if we need to regenerate bird objects
+birds_update = True
+
+dots_path=False
