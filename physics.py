@@ -1,6 +1,6 @@
 from game import *
 
-def drag_velocity(x_lau_b, y_lau_b):
+def drag_velocity(x_lau_b, y_lau_b, Nx, Ny):
     global V_factor
     mouse_pos = pygame.mouse.get_pos()
     x_lau_a = mouse_pos[0]
@@ -9,20 +9,23 @@ def drag_velocity(x_lau_b, y_lau_b):
     del_y = y_lau_b - y_lau_a
     
     # Limit maximum velocity for better playability
+    # Scale maximum magnitude based on screen size
     magnitude = (del_x**2 + del_y**2)**0.5
-    max_magnitude = 80  # Adjust this value as needed
+    max_magnitude = 80*((Nx+Ny)/2)  # Scale the maximum magnitude with screen size
     
     if magnitude > max_magnitude:
         scale_factor = max_magnitude / magnitude
         del_x *= scale_factor
         del_y *= scale_factor
     
+    # Scale velocity based on screen size
     Vx = del_x * V_factor
-    Vy = del_y * V_factor 
+    Vy = del_y * V_factor
     return Vx, Vy
 
 def launch_gravity(Vx, Vy, red_x, red_y, t, T1):
-    A = 600  # Gravity acceleration
+    # Scale gravity based on global scaling factors to maintain consistent physics
+    A = 600  # Base gravity acceleration
     del_t = t - T1
     
     # Limit the time step to prevent physics issues

@@ -28,22 +28,22 @@ while run:
                         run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:                 
                     if 10*Nx < mouse_pos[0] < 70*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p1[3], x=slin1_bird_x, y=slin1_bird_y)
+                        slin_bird = Bird(name=rand_birds_p1[3], Nx=Nx, Ny=Ny, x=slin1_bird_x, y=slin1_bird_y)
                         rand_birds_p1[3] = gen_ran_bird(rand_birds_p1)
                         Visible = True
                         birds_update = True
                     elif 90*Nx < mouse_pos[0] < 150*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p1[2], x=slin1_bird_x, y=slin1_bird_y)
+                        slin_bird = Bird(name=rand_birds_p1[2], Nx=Nx, Ny=Ny, x=slin1_bird_x, y=slin1_bird_y)
                         rand_birds_p1[2] = gen_ran_bird(rand_birds_p1)
                         Visible = True
                         birds_update = True
                     elif 170*Nx < mouse_pos[0] < 230*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p1[1], x=slin1_bird_x, y=slin1_bird_y)
+                        slin_bird = Bird(name=rand_birds_p1[1], Nx=Nx, Ny=Ny, x=slin1_bird_x, y=slin1_bird_y)
                         rand_birds_p1[1] = gen_ran_bird(rand_birds_p1)
                         Visible = True
                         birds_update = True
                     elif 230*Nx < mouse_pos[0] < 310*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p1[0], x=slin1_bird_x, y=slin1_bird_y)
+                        slin_bird = Bird(name=rand_birds_p1[0], Nx=Nx, Ny=Ny, x=slin1_bird_x, y=slin1_bird_y)
                         rand_birds_p1[0] = gen_ran_bird(rand_birds_p1)
                         Visible = True
                         birds_update = True
@@ -54,22 +54,22 @@ while run:
                         run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if 1466*Nx < mouse_pos[0] < 1526*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p2[0], x=slin2_bird_x, y=slin2_bird_y)
+                        slin_bird = Bird(name=rand_birds_p2[0], Nx=Nx, Ny=Ny, x=slin2_bird_x, y=slin2_bird_y)
                         rand_birds_p2[0] = gen_ran_bird(rand_birds_p2)
                         Visible = True
                         birds_update = True
                     elif 1386*Nx < mouse_pos[0] < 1446*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p2[1], x=slin2_bird_x, y=slin2_bird_y)
+                        slin_bird = Bird(name=rand_birds_p2[1], Nx=Nx, Ny=Ny, x=slin2_bird_x, y=slin2_bird_y)
                         rand_birds_p2[1] = gen_ran_bird(rand_birds_p2)
                         Visible = True
                         birds_update = True
                     elif 1306*Nx < mouse_pos[0] < 1366*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p2[2], x=slin2_bird_x, y=slin2_bird_y)
+                        slin_bird = Bird(name=rand_birds_p2[2], Nx=Nx, Ny=Ny, x=slin2_bird_x, y=slin2_bird_y)
                         rand_birds_p2[2] = gen_ran_bird(rand_birds_p2)
                         Visible = True
                         birds_update = True
                     elif 1226*Nx < mouse_pos[0] < 1286*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
-                        slin_bird = Bird(name=rand_birds_p2[3], x=slin2_bird_x, y=slin2_bird_y)
+                        slin_bird = Bird(name=rand_birds_p2[3], Nx=Nx, Ny=Ny, x=slin2_bird_x, y=slin2_bird_y)
                         rand_birds_p2[3] = gen_ran_bird(rand_birds_p2)
                         Visible = True
                         birds_update = True
@@ -82,10 +82,10 @@ while run:
                 if screen_wid/50 < mouse_pos[0] < screen_wid * 2 / 15 and (7 / 9) * screen_height < mouse_pos[1] < screen_height:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         x_lau_b, y_lau_b = mouse_pos[0], mouse_pos[1]
-                        dots_path=True
+                        dots_path = True
                     if event.type == pygame.MOUSEBUTTONUP:
                         start_time = time.time()
-                        dots_path=False
+                        dots_path = False
                         launch_state = True
                         T1 = 0
                         
@@ -96,50 +96,53 @@ while run:
                 if screen_wid*13/15 < mouse_pos[0] < screen_wid *29/15 and (7 / 9) * screen_height < mouse_pos[1] < screen_height:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         x_lau_b, y_lau_b = mouse_pos[0], mouse_pos[1]
-                        dots_path=True
+                        dots_path = True
                     if event.type == pygame.MOUSEBUTTONUP:
                         start_time = time.time()
-                        dots_path=False
+                        dots_path = False
                         launch_state = True
                         T1 = 0
                         
     if dots_path and slin_bird:                    
-        Vx, Vy = drag_velocity(x_lau_b, y_lau_b)  # new_bird velocity
+        Vx, Vy = drag_velocity(x_lau_b, y_lau_b, Nx, Ny)  # new_bird velocity
         Vix, Viy = Vx, Vy  # initial velocities
-        slin_bird.position[0], slin_bird.position[1] = mouse_pos[0]-27.5, mouse_pos[1]-27.5
-        slin_bird.update()
+        slin_bird.position[0], slin_bird.position[1] = mouse_pos[0]-27.5*Nx, mouse_pos[1]-27.5*Ny
+        slin_bird.update(Nx, Ny)
         
     # Update birds only when needed
     if birds_update:
-        bird_sprites_p1[0] = Bird(name=rand_birds_p1[3], x=10*Nx, y=10*Ny)
-        bird_sprites_p1[1] = Bird(name=rand_birds_p1[2], x=90*Nx, y=10*Ny)
-        bird_sprites_p1[2] = Bird(name=rand_birds_p1[1], x=170*Nx, y=10*Ny)
-        bird_sprites_p1[3] = Bird(name=rand_birds_p1[0], x=250*Nx, y=10*Ny)
-        bird_sprites_p2[3] = Bird(name=rand_birds_p2[3], x=1226*Nx, y=10*Ny)
-        bird_sprites_p2[2] = Bird(name=rand_birds_p2[2], x=1306*Nx, y=10*Ny)
-        bird_sprites_p2[1] = Bird(name=rand_birds_p2[1], x=1386*Nx, y=10*Ny)
-        bird_sprites_p2[0] = Bird(name=rand_birds_p2[0], x=1466*Nx, y=10*Ny)
+        bird_sprites_p1[0] = Bird(name=rand_birds_p1[3], Nx=Nx, Ny=Ny, x=10*Nx, y=10*Ny)
+        bird_sprites_p1[1] = Bird(name=rand_birds_p1[2], Nx=Nx, Ny=Ny, x=90*Nx, y=10*Ny)
+        bird_sprites_p1[2] = Bird(name=rand_birds_p1[1], Nx=Nx, Ny=Ny, x=170*Nx, y=10*Ny)
+        bird_sprites_p1[3] = Bird(name=rand_birds_p1[0], Nx=Nx, Ny=Ny, x=250*Nx, y=10*Ny)
+        bird_sprites_p2[3] = Bird(name=rand_birds_p2[3], Nx=Nx, Ny=Ny, x=1226*Nx, y=10*Ny)
+        bird_sprites_p2[2] = Bird(name=rand_birds_p2[2], Nx=Nx, Ny=Ny, x=1306*Nx, y=10*Ny)
+        bird_sprites_p2[1] = Bird(name=rand_birds_p2[1], Nx=Nx, Ny=Ny, x=1386*Nx, y=10*Ny)
+        bird_sprites_p2[0] = Bird(name=rand_birds_p2[0], Nx=Nx, Ny=Ny, x=1466*Nx, y=10*Ny)
         birds_update = False    
 
                         
     if Visible and launch_state and slin_bird:
         t = time.time() - start_time
         # Modified condition to allow both player birds to handle multiple collisions
-        # Increased the count threshold from 3 to 5 for more collisions before disappearing
-        # Also made velocity decay more gradual (from 1/2 to 1/3) for longer flight
+        # Check if bird should still be active
         if (slin_bird.count < 5 or sqrt(Vx**2 + Vy**2) > sqrt(Vix**2 + Viy**2) * 1 / 3) and slin_bird.count < 8:
+            # Handle bottom screen collision
             if slin_bird.position[1] > screen_height - 55*Ny:
                 if Vy > 0:
                     Vy *= -0.8
                     slin_bird.count += 1
+            
+            # Handle left and right screen collision
             if (slin_bird.position[0] <= -(screen_wid / 150) and Vx < 0) or (slin_bird.position[0] >= screen_wid - ((screen_wid / 30) * 4 / 5) and Vx > 0):
                 Vx *= -0.8
                 slin_bird.count += 1
+                
             # Updating bird position
             slin_bird.position[0], slin_bird.position[1], Vx, Vy, T1 = launch_gravity(Vx, Vy, slin_bird.position[0], slin_bird.position[1], t, T1)
-            slin_bird.update()
+            slin_bird.update(Nx, Ny)
             # Update the center of the bird after position update
-            slin_bird.center = [slin_bird.position[0]+27.5, slin_bird.position[1]+27.5]
+            slin_bird.center = [slin_bird.position[0]+27.5*Nx, slin_bird.position[1]+27.5*Ny]
         else:
             launch_state = False
             Visible = False
@@ -192,82 +195,113 @@ while run:
         
         # Check collisions
         if Visible and slin_bird:
-            # Store the object that was collided with
-            collided_obj = None
             collision_detected = False  # Track if collision happens this frame
             
             if p_1:
                 # Player 1 bird collides with player 2 boxes
                 for obj in box_obj_p2:
-                    # Calculate distance for rough collision check
-                    distance = sqrt((slin_bird.center[0]-obj.position[0])**2 + (slin_bird.center[1]-obj.position[1])**2)
-                    if distance < 65:
-                        # Use pygame's rect collision for more accurate detection
-                        collision_rect = obj.rect.inflate(-10, -10)
-                        if collision_rect.colliderect(slin_bird.rect):
-                            collided_obj = obj
-                            if not collision_detected:  # Only increment count once per frame
-                                slin_bird.count += 1
-                                collision_detected = True
+                    # Use bird's and object's collision rects for more consistent detection
+                    bird_rect = pygame.Rect(
+                        slin_bird.position[0], 
+                        slin_bird.position[1],
+                        55*Nx, 
+                        55*Ny
+                    )
+                    
+                    # Create object collision rect (centered on object position)
+                    obj_rect = pygame.Rect(
+                        obj.position[0] - 35*Nx,  # Half the size of 70*Nx
+                        obj.position[1] - 35*Ny,  # Half the size of 70*Ny
+                        70*Nx,
+                        70*Ny
+                    )
+                    
+                    # Check collision using rect collision
+                    if bird_rect.colliderect(obj_rect):
+                        if not collision_detected:  # Only increment count once per frame
+                            slin_bird.count += 1
+                            collision_detected = True
+                        
+                        # Calculate collision direction vector (from object center to bird center)
+                        dx = slin_bird.center[0] - obj.position[0]
+                        dy = slin_bird.center[1] - obj.position[1]
+                        
+                        # Object damage on collision
+                        obj.damage(25, Nx, Ny)
+                        
+                        # Normalize direction vector
+                        mag = sqrt(dx*dx + dy*dy)
+                        if mag > 0:  # Avoid division by zero
+                            dx /= mag
+                            dy /= mag
                             
-                            # Calculate the collision angle to determine bounce direction
-                            dx = slin_bird.center[0] - obj.position[0]
-                            dy = slin_bird.center[1] - obj.position[1]
+                            # Calculate dot product to determine if collision is more horizontal or vertical
+                            dot_x = abs(dx * (1 if Vx > 0 else -1))
+                            dot_y = abs(dy * (1 if Vy > 0 else -1))
                             
-                            # Improved collision response logic with more gradual velocity changes
-                            # Avoid division by zero
-                            if abs(dx) < 0.1:
-                                # More vertical collision
-                                Vy *= -0.7  # Less dampening for more bounces
-                            elif abs(dy) < 0.1:
-                                # More horizontal collision
+                            # Update velocities based on collision angle
+                            if dot_x > dot_y:  # More horizontal collision
                                 Vx *= -0.7
-                            elif abs(dy/dx) < 1:
-                                # More horizontal collision
-                                Vx *= -0.7
-                            else:
-                                # More vertical collision
+                            else:  # More vertical collision
                                 Vy *= -0.7
-                            
-                            # Reduce object health (for future implementation)
-                            # obj.health -= 25
-                            break
+                        else:
+                            # Fallback if vectors align perfectly (rare)
+                            Vx *= -0.7
+                            Vy *= -0.7
+                        break
             
             if p_2:
                 # Player 2 bird collides with player 1 boxes
                 for obj in box_obj_p1:
-                    # Calculate distance for rough collision check
-                    distance = sqrt((slin_bird.center[0]-obj.position[0])**2 + (slin_bird.center[1]-obj.position[1])**2)
-                    if distance < 65:
-                        # Use pygame's rect collision for more accurate detection
-                        collision_rect = obj.rect.inflate(-10, -10)
-                        if collision_rect.colliderect(slin_bird.rect):
-                            collided_obj = obj
-                            if not collision_detected:  # Only increment count once per frame
-                                slin_bird.count += 1
-                                collision_detected = True
+                    # Use bird's and object's collision rects for more consistent detection
+                    bird_rect = pygame.Rect(
+                        slin_bird.position[0], 
+                        slin_bird.position[1],
+                        55*Nx, 
+                        55*Ny
+                    )
+                    
+                    # Create object collision rect (centered on object position)
+                    obj_rect = pygame.Rect(
+                        obj.position[0] - 35*Nx,  # Half the size of 70*Nx
+                        obj.position[1] - 35*Ny,  # Half the size of 70*Ny
+                        70*Nx,
+                        70*Ny
+                    )
+                    
+                    # Check collision using rect collision
+                    if bird_rect.colliderect(obj_rect):
+                        if not collision_detected:  # Only increment count once per frame
+                            slin_bird.count += 1
+                            collision_detected = True
+                        
+                        # Calculate collision direction vector (from object center to bird center)
+                        dx = slin_bird.center[0] - obj.position[0]
+                        dy = slin_bird.center[1] - obj.position[1]
+                        
+                        # Object damage on collision
+                        obj.damage(25, Nx, Ny)
+                        
+                        # Normalize direction vector
+                        mag = sqrt(dx*dx + dy*dy)
+                        if mag > 0:  # Avoid division by zero
+                            dx /= mag
+                            dy /= mag
                             
-                            # Calculate the collision angle to determine bounce direction
-                            dx = slin_bird.center[0] - obj.position[0]
-                            dy = slin_bird.center[1] - obj.position[1]
+                            # Calculate dot product to determine if collision is more horizontal or vertical
+                            dot_x = abs(dx * (1 if Vx > 0 else -1))
+                            dot_y = abs(dy * (1 if Vy > 0 else -1))
                             
-                            # Identical collision response logic for both players
-                            if abs(dx) < 0.1:
-                                # More vertical collision
-                                Vy *= -0.7
-                            elif abs(dy) < 0.1:
-                                # More horizontal collision
+                            # Update velocities based on collision angle
+                            if dot_x > dot_y:  # More horizontal collision
                                 Vx *= -0.7
-                            elif abs(dy/dx) < 1:
-                                # More horizontal collision
-                                Vx *= -0.7
-                            else:
-                                # More vertical collision
+                            else:  # More vertical collision
                                 Vy *= -0.7
-                            
-                            # Reduce object health (for future implementation)
-                            # obj.health -= 25
-                            break
+                        else:
+                            # Fallback if vectors align perfectly (rare)
+                            Vx *= -0.7
+                            Vy *= -0.7
+                        break
         
         # Draw all bird sprites
         for bird in bird_sprites_p1:

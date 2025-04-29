@@ -65,7 +65,7 @@ for box in Boxes_p1:
 for box in Boxes_p1:
     fill= [Wood, Stone, Ice]
     random_selection = random.choice(fill)
-    boxx=random_selection(box[0],box[1])
+    boxx=random_selection(box[0],box[1],Nx,Ny)
     box_obj_p1.append(boxx)
     
 #player2
@@ -86,7 +86,7 @@ for box in Boxes_p2:
 for box in Boxes_p2:
     fill= [Wood, Stone, Ice]
     random_selection = random.choice(fill)
-    boxx=random_selection(box[0],box[1])
+    boxx=random_selection(box[0],box[1],Nx,Ny)
     box_obj_p2.append(boxx)
     
 #sling
@@ -135,3 +135,42 @@ dots_path = False
 #collision
 collide_list=[]
 iscol=False
+
+# Collision function for bird and obstacle
+def check_collision(bird, obstacle):
+    # Use the proper collision rects we defined in characters.py
+    return bird.collision_rect.colliderect(obstacle.collision_rect)
+
+# Function to handle collision physics
+def handle_collision(bird, obstacle, vx, vy):
+    # Calculate collision direction vector (from obstacle center to bird center)
+    dx = bird.center[0] - obstacle.position[0]
+    dy = bird.center[1] - obstacle.position[1]
+    
+    # Damage the obstacle
+    obstacle.damage(25, bird.Nx, bird.Ny)
+    
+    # Normalize direction vector
+    mag = (dx*dx + dy*dy)**0.5
+    if mag > 0:  # Avoid division by zero
+        dx /= mag
+        dy /= mag
+        
+        # Calculate dot product to determine if collision is more horizontal or vertical
+        dot_x = abs(dx * (1 if vx > 0 else -1))
+        dot_y = abs(dy * (1 if vy > 0 else -1))
+        
+        # Update velocities based on collision angle with proper scaling
+        if dot_x > dot_y:  # More horizontal collision
+            vx *= -0.7
+        else:  # More vertical collision
+            vy *= -0.7
+    else:
+        # Fallback if vectors align perfectly (rare)
+        vx *= -0.7
+        vy *= -0.7
+    
+    # Increment collision count for the bird
+    bird.count += 1
+    
+    return vx, vy
