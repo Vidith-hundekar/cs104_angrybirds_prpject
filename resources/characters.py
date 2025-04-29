@@ -61,11 +61,11 @@ class Wood(pygame.sprite.Sprite):
         )
         
     def update_image(self):
-        if self.health >= 75:
+        if self.health > 75:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/wood_100.png'), self.size)
-        elif self.health >= 50:
+        elif self.health > 50:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/wood_75.png'), self.size)
-        elif self.health >= 25:
+        elif self.health > 25:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/wood_50.png'), self.size)
         elif self.health > 0:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/wood_25.png'), self.size)
@@ -108,11 +108,11 @@ class Stone(pygame.sprite.Sprite):
         )
         
     def update_image(self):
-        if self.health >= 75:
+        if self.health > 75:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/stone_100.png'), self.size)
-        elif self.health >= 50:
+        elif self.health > 50:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/stone_75.png'), self.size)
-        elif self.health >= 25:
+        elif self.health > 25:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/stone_50.png'), self.size)
         elif self.health > 0:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/stone_25.png'), self.size)
@@ -155,11 +155,11 @@ class Ice(pygame.sprite.Sprite):
         )
         
     def update_image(self):
-        if self.health >= 75:
+        if self.health > 75:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/ice_100.png'), self.size)
-        elif self.health >= 50:
+        elif self.health > 50:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/ice_75.png'), self.size)
-        elif self.health >= 25:
+        elif self.health > 25:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/ice_50.png'), self.size)
         elif self.health > 0:
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/ice_25.png'), self.size)

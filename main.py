@@ -198,110 +198,59 @@ while run:
             collision_detected = False  # Track if collision happens this frame
             
             if p_1:
-                # Player 1 bird collides with player 2 boxes
-                for obj in box_obj_p2:
-                    # Use bird's and object's collision rects for more consistent detection
-                    bird_rect = pygame.Rect(
-                        slin_bird.position[0], 
-                        slin_bird.position[1],
-                        55*Nx, 
-                        55*Ny
-                    )
+                targ=box_obj_p2
+            elif p_2:
+                targ=box_obj_p1
+
+            for obj in targ:
+                # Check if this object is on cooldown for collision
+                obj_id = id(obj)  # Use object's ID as unique identifier
+                
+                # Initialize collision cooldowns dictionary if it doesn't exist
+                if not hasattr(slin_bird, 'object_cooldowns'):
+                    slin_bird.object_cooldowns = {}
+                
+                # Skip collision check if this object is on cooldown
+                if obj_id in slin_bird.object_cooldowns and slin_bird.object_cooldowns[obj_id] > 0:
+                    slin_bird.object_cooldowns[obj_id] -= 1
+                    continue
                     
-                    # Create object collision rect (centered on object position)
-                    obj_rect = pygame.Rect(
-                        obj.position[0] - 35*Nx,  # Half the size of 70*Nx
-                        obj.position[1] - 35*Ny,  # Half the size of 70*Ny
-                        70*Nx,
-                        70*Ny
-                    )
+                if slin_bird.rect.colliderect(obj) and getattr(slin_bird, 'collision_cooldown', 0) <= 0:
+                    if not collision_detected:  # Only increment count once per frame
+                        slin_bird.count += 1
+                        collision_detected = True
                     
-                    # Check collision using rect collision
-                    if bird_rect.colliderect(obj_rect):
-                        if not collision_detected:  # Only increment count once per frame
-                            slin_bird.count += 1
-                            collision_detected = True
-                        
-                        # Calculate collision direction vector (from object center to bird center)
-                        dx = slin_bird.center[0] - obj.position[0]
-                        dy = slin_bird.center[1] - obj.position[1]
-                        
-                        # Object damage on collision
-                        obj.damage(25, Nx, Ny)
-                        
-                        # Normalize direction vector
-                        mag = sqrt(dx*dx + dy*dy)
-                        if mag > 0:  # Avoid division by zero
-                            dx /= mag
-                            dy /= mag
-                            
-                            # Calculate dot product to determine if collision is more horizontal or vertical
-                            dot_x = abs(dx * (1 if Vx > 0 else -1))
-                            dot_y = abs(dy * (1 if Vy > 0 else -1))
-                            
-                            # Update velocities based on collision angle
-                            if dot_x > dot_y:  # More horizontal collision
-                                Vx *= -0.7
-                            else:  # More vertical collision
-                                Vy *= -0.7
-                        else:
-                            # Fallback if vectors align perfectly (rare)
+                    # Calculate collision direction vector (from object center to bird center)
+                    dx = slin_bird.center[0] - obj.position[0]
+                    dy = slin_bird.center[1] - obj.position[1]
+                    
+                    # Object damage on collision
+                    print("hi")
+                    print(obj.health)
+                    obj.damage(25, Nx, Ny)
+                    print(Vx, Vy)
+                    print(obj.health)
+                    
+                    # Normalize direction vector
+                    mag = sqrt(dx*dx + dy*dy)
+                    if mag > 0:  # Avoid division by zero
+                        if abs(dx) > abs(dy):
                             Vx *= -0.7
-                            Vy *= -0.7
-                        break
-            
-            if p_2:
-                # Player 2 bird collides with player 1 boxes
-                for obj in box_obj_p1:
-                    # Use bird's and object's collision rects for more consistent detection
-                    bird_rect = pygame.Rect(
-                        slin_bird.position[0], 
-                        slin_bird.position[1],
-                        55*Nx, 
-                        55*Ny
-                    )
-                    
-                    # Create object collision rect (centered on object position)
-                    obj_rect = pygame.Rect(
-                        obj.position[0] - 35*Nx,  # Half the size of 70*Nx
-                        obj.position[1] - 35*Ny,  # Half the size of 70*Ny
-                        70*Nx,
-                        70*Ny
-                    )
-                    
-                    # Check collision using rect collision
-                    if bird_rect.colliderect(obj_rect):
-                        if not collision_detected:  # Only increment count once per frame
-                            slin_bird.count += 1
-                            collision_detected = True
-                        
-                        # Calculate collision direction vector (from object center to bird center)
-                        dx = slin_bird.center[0] - obj.position[0]
-                        dy = slin_bird.center[1] - obj.position[1]
-                        
-                        # Object damage on collision
-                        obj.damage(25, Nx, Ny)
-                        
-                        # Normalize direction vector
-                        mag = sqrt(dx*dx + dy*dy)
-                        if mag > 0:  # Avoid division by zero
-                            dx /= mag
-                            dy /= mag
-                            
-                            # Calculate dot product to determine if collision is more horizontal or vertical
-                            dot_x = abs(dx * (1 if Vx > 0 else -1))
-                            dot_y = abs(dy * (1 if Vy > 0 else -1))
-                            
-                            # Update velocities based on collision angle
-                            if dot_x > dot_y:  # More horizontal collision
-                                Vx *= -0.7
-                            else:  # More vertical collision
-                                Vy *= -0.7
                         else:
-                            # Fallback if vectors align perfectly (rare)
-                            Vx *= -0.7
                             Vy *= -0.7
-                        break
+                    else:
+                        # Fallback if vectors align perfectly (rare)
+                        Vx *= -0.7
+                        Vy *= -0.7
+                    print(Vx, Vy)
+                    
+                    # Set cooldown for this specific object (30 frames = 0.5 seconds at 60fps)
+                    slin_bird.object_cooldowns[obj_id] = 30
+                    
+                    break
+                    
+                # Global collision cooldown (still useful to keep)
+                slin_bird.collision_cooldown = max(0, getattr(slin_bird, 'collision_cooldown', 0) - 1)
         
         # Draw all bird sprites
         for bird in bird_sprites_p1:
