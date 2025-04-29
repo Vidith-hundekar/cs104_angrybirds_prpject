@@ -14,12 +14,24 @@ class Bird(pygame.sprite.Sprite):
         
         # Load the appropriate bird image
         if name == "RED":
+            self.max=150
+            self.nor=150
+            self.tar=["Wood","Stone","Ice"]
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/red.png'), self.size)
         elif name == "CHUCKS":
+            self.tar=["Wood"]
+            self.max=200
+            self.nor=100
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/chucks.png'), self.size)
         elif name == "BOMB":
+            self.tar=["Stone"]
+            self.max=200
+            self.nor=100
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/Bombs.png'), self.size)
         elif name == "BLUE":
+            self.tar=["Ice"]
+            self.max=200
+            self.nor=100
             self.img = pygame.transform.scale(pygame.image.load('./resources/images/blue.png'), self.size)
             
         self.rect = self.img.get_rect(topleft=(self.position[0], self.position[1]))
@@ -43,6 +55,7 @@ class Wood(pygame.sprite.Sprite):
     def __init__(self, cen_x, cen_y, Nx, Ny):
         super().__init__()
         self.health = 100
+        self.name="Wood"
         self.position = [cen_x, cen_y] 
         self.Nx = Nx  # Store scaling factors as object properties
         self.Ny = Ny
@@ -90,6 +103,7 @@ class Stone(pygame.sprite.Sprite):
     def __init__(self, cen_x, cen_y, Nx, Ny):
         super().__init__()
         self.health = 100
+        self.name="Stone"
         self.position = [cen_x, cen_y]
         self.Nx = Nx  # Store scaling factors as object properties
         self.Ny = Ny
@@ -137,6 +151,7 @@ class Ice(pygame.sprite.Sprite):
     def __init__(self, cen_x, cen_y, Nx, Ny):
         super().__init__()
         self.health = 100
+        self.name="Ice"
         self.position = [cen_x, cen_y]
         self.Nx = Nx  # Store scaling factors as object properties
         self.Ny = Ny

@@ -126,7 +126,7 @@ while run:
         t = time.time() - start_time
         # Modified condition to allow both player birds to handle multiple collisions
         # Check if bird should still be active
-        if (slin_bird.count < 5 or sqrt(Vx**2 + Vy**2) > sqrt(Vix**2 + Viy**2) * 1 / 3) and slin_bird.count < 8:
+        if slin_bird.count < 5 or sqrt(Vx**2 + Vy**2) > sqrt(Vix**2 + Viy**2) * 1 / 3:
             # Handle bottom screen collision
             if slin_bird.position[1] > screen_height - 55*Ny:
                 if Vy > 0:
@@ -188,12 +188,27 @@ while run:
         screen.blit(text_surface4, (920*Nx, 10*Ny))
         
         # Draw all boxes first
-        for obj in box_obj_p1:
-            obj.draw(screen)
-        for obj in box_obj_p2:
-            obj.draw(screen)     
-        
-        # Check collisions
+        # For player 1 boxes
+        i = 0
+        while i < len(box_obj_p1):
+            obj = box_obj_p1[i]
+            if obj.health != 0:
+                obj.draw(screen)
+                i += 1  # Only increment index if we didn't remove an object
+            else:
+                box_obj_p1.pop(i)  # Remove object and don't increment index
+                # No need to decrement i because the list shifts automatically
+
+        # For player 2 boxes
+        j = 0
+        while j < len(box_obj_p2):
+            obj = box_obj_p2[j]
+            if obj.health != 0:
+                obj.draw(screen)
+                j += 1  # Only increment index if we didn't remove an object
+            else:
+                box_obj_p2.pop(j)  # Remove object and don't increment index
+                # Check collisions
         if Visible and slin_bird:
             collision_detected = False  # Track if collision happens this frame
             
@@ -216,6 +231,7 @@ while run:
                     continue
                     
                 if slin_bird.rect.colliderect(obj) and getattr(slin_bird, 'collision_cooldown', 0) <= 0:
+                    print(Vx,Vy)
                     if not collision_detected:  # Only increment count once per frame
                         slin_bird.count += 1
                         collision_detected = True
@@ -224,31 +240,68 @@ while run:
                     dx = slin_bird.center[0] - obj.position[0]
                     dy = slin_bird.center[1] - obj.position[1]
                     
-                    # Object damage on collision
-                    print("hi")
-                    print(obj.health)
-                    obj.damage(25, Nx, Ny)
-                    print(Vx, Vy)
-                    print(obj.health)
-                    
                     # Normalize direction vector
                     mag = sqrt(dx*dx + dy*dy)
-                    if mag > 0:  # Avoid division by zero
-                        if abs(dx) > abs(dy):
-                            Vx *= -0.7
+                    if obj.name in slin_bird.tar:
+                        if mag > 0:  # Avoid division by zero
+                            if abs(dx) > abs(dy):
+                                if destroy(slin_bird, Vx, obj):
+                                    # Bird continues through - don't modify velocity
+                                    Vx*=1/5
+                                else:  
+                                    obj.damage(slin_bird.max*abs(Vx)/1600, Nx, Ny)                          
+                                    Vx *= -0.7
+                            else:
+                                if destroy(slin_bird, Vy, obj):
+                                    # Bird continues through - don't modify velocity
+                                    Vy*=1/5
+                                else:
+                                    obj.damage(slin_bird.max*abs(Vy)/1000, Nx, Ny)
+                                    Vy *= -0.7
                         else:
-                            Vy *= -0.7
+                            # Fallback if vectors align perfectly (rare)
+                            if not destroy(slin_bird, max(abs(Vx), abs(Vy)), obj):
+                                Vx *= -0.7
+                                Vy *= -0.7
+                                obj.damage(slin_bird.max*abs(Vx)/3200+slin_bird.max*abs(Vy)/2000, Nx, Ny)
+                        
+                        # Set cooldown for this specific object (30 frames = 0.5 seconds at 60fps)
+                        slin_bird.object_cooldowns[obj_id] = 15
+                        
+                        if destroy(slin_bird, max(abs(Vx), abs(Vy)), obj):
+                            continue  # Skip to next obstacle if this one was destroyed
+                        else:
+                            break  # Stop checking more obstacles if this one wasn't destroyed
                     else:
-                        # Fallback if vectors align perfectly (rare)
-                        Vx *= -0.7
-                        Vy *= -0.7
-                    print(Vx, Vy)
-                    
-                    # Set cooldown for this specific object (30 frames = 0.5 seconds at 60fps)
-                    slin_bird.object_cooldowns[obj_id] = 30
-                    
-                    break
-                    
+                        if mag > 0:  # Avoid division by zero
+                            if abs(dx) > abs(dy):
+                                if destroy(slin_bird, Vx, obj):
+                                    # Bird continues through - don't modify velocity
+                                    pass
+                                else:  
+                                    obj.damage(slin_bird.nor*abs(Vx)/1600, Nx, Ny)                          
+                                    Vx *= -0.7
+                            else:
+                                if destroy(slin_bird, Vy, obj):
+                                    # Bird continues through - don't modify velocity
+                                    pass
+                                else:
+                                    obj.damage(slin_bird.nor*abs(Vy)/1000, Nx, Ny)
+                                    Vy *= -0.7
+                        else:
+                            # Fallback if vectors align perfectly (rare)
+                            if not destroy(slin_bird, max(abs(Vx), abs(Vy)), obj):
+                                Vx *= -0.7
+                                Vy *= -0.7
+                                obj.damage(slin_bird.nor*abs(Vx)/3200+slin_bird.nor*abs(Vy)/2000, Nx, Ny)
+                        
+                        # Set cooldown for this specific object (30 frames = 0.5 seconds at 60fps)
+                        slin_bird.object_cooldowns[obj_id] = 15
+                        
+                        if destroy(slin_bird, max(abs(Vx), abs(Vy)), obj):
+                            continue  # Skip to next obstacle if this one was destroyed
+                        else:
+                            break  # Stop checking more obstacles if this one wasn't destroyed
                 # Global collision cooldown (still useful to keep)
                 slin_bird.collision_cooldown = max(0, getattr(slin_bird, 'collision_cooldown', 0) - 1)
         

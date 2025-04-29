@@ -82,3 +82,16 @@ def gen_ran_bird(rand_birds):
         return random.choice(options)
     else:
         return random.choice(bird_types)
+    
+def destroy(Bird,V,block):
+    if(block.name in Bird.tar):
+        if(block.health <= abs(Bird.max*V/1600)):
+            block.health=0
+            return True
+    else:
+        if(block.health <= Bird.nor*V/1600):
+            block.health=0
+            return True
+    return False
+        
+    
