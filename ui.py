@@ -22,7 +22,8 @@ def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event):
             A_p2=True
             pygame.key.start_text_input() 
         elif(650*Nx < mouse_pos[0] < 920*Ny and 580*Ny < mouse_pos[1] < 710*Ny):
-            ui_status=False
+            if text1 != "" and text2 != "":
+                ui_status=False
 
     # Handle text input for Player 1
     if active == "p_1":

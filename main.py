@@ -15,6 +15,7 @@ run = True
 slin_bird = None
 
 while run:
+    # print(Score_p1,Score_p2)
     clock.tick(90) 
     
     for event in pygame.event.get():
@@ -26,7 +27,8 @@ while run:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         run = False
-                if event.type == pygame.MOUSEBUTTONDOWN:                 
+                if event.type == pygame.MOUSEBUTTONDOWN:   
+                    print(pygame.mouse.get_pos())              
                     if 10*Nx < mouse_pos[0] < 70*Nx and 10*Ny < mouse_pos[1] < 70*Ny:
                         slin_bird = Bird(name=rand_birds_p1[3], Nx=Nx, Ny=Ny, x=slin1_bird_x, y=slin1_bird_y)
                         rand_birds_p1[3] = gen_ran_bird(rand_birds_p1)
@@ -103,11 +105,25 @@ while run:
                         launch_state = True
                         T1 = 0
                         
-    if dots_path and slin_bird:                    
-        Vx, Vy = drag_velocity(x_lau_b, y_lau_b, Nx, Ny)  # new_bird velocity
-        Vix, Viy = Vx, Vy  # initial velocities
-        slin_bird.position[0], slin_bird.position[1] = mouse_pos[0]-27.5*Nx, mouse_pos[1]-27.5*Ny
-        slin_bird.update(Nx, Ny)
+    if dots_path and slin_bird:
+            mouse_pos = pygame.mouse.get_pos()
+            # Check if mouse is within the boundaries for player 1
+            if p_1 and not (screen_wid/50 < mouse_pos[0] < screen_wid * 2 / 15 and (7 / 9) * screen_height < mouse_pos[1] < screen_height):
+                dots_path = False
+                # Reset bird position to original sling position
+                slin_bird.position[0], slin_bird.position[1] = slin1_bird_x, slin1_bird_y
+                slin_bird.update(Nx, Ny)
+            # Check if mouse is within the boundaries for player 2  
+            elif p_2 and not (screen_wid*13/15 < mouse_pos[0] < screen_wid *29/15 and (7 / 9) * screen_height < mouse_pos[1] < screen_height):
+                dots_path = False
+                # Reset bird position to original sling position
+                slin_bird.position[0], slin_bird.position[1] = slin2_bird_x, slin2_bird_y
+                slin_bird.update(Nx, Ny)
+            else:
+                Vx, Vy = drag_velocity(x_lau_b, y_lau_b, Nx, Ny)  # new_bird velocity
+                Vix, Viy = Vx, Vy  # initial velocities
+                slin_bird.position[0], slin_bird.position[1] = mouse_pos[0]-27.5*Nx, mouse_pos[1]-27.5*Ny
+                slin_bird.update(Nx, Ny)
         
     # Update birds only when needed
     if birds_update:
@@ -161,7 +177,7 @@ while run:
     text_surface2 = font.render(text2, True, (0, 0, 0))
     text_surface3 = font.render(text1, True, (255,255,255))
     text_surface4 = font.render(text2, True, (255,255,255))
-    text_surface5 = small_font.render(text3,True,(255,0,0))
+    text_surface5 = small_font.render(text3,True,(0,0,255))
     text_surface6 = smaller_font.render(text4,True,(0,0,255))
     
     # Rendering everything
@@ -184,7 +200,7 @@ while run:
         screen.blit(background, (0, 0))
         screen.blit(sling, sling_1_pos)
         screen.blit(sling, sling_2_pos)
-        screen.blit(text_surface3, (360*Nx, 10*Ny))
+        screen.blit(text_surface3, (320*Nx, 10*Ny))
         screen.blit(text_surface4, (920*Nx, 10*Ny))
         
         # Draw all boxes first
@@ -196,6 +212,7 @@ while run:
                 obj.draw(screen)
                 i += 1  # Only increment index if we didn't remove an object
             else:
+                Score_p2+=5
                 box_obj_p1.pop(i)  # Remove object and don't increment index
                 # No need to decrement i because the list shifts automatically
 
@@ -207,6 +224,7 @@ while run:
                 obj.draw(screen)
                 j += 1  # Only increment index if we didn't remove an object
             else:
+                Score_p1+=5
                 box_obj_p2.pop(j)  # Remove object and don't increment index
                 # Check collisions
         if Visible and slin_bird:
@@ -249,7 +267,11 @@ while run:
                                     # Bird continues through - don't modify velocity
                                     Vx*=1/5
                                 else:  
-                                    obj.damage(slin_bird.max*abs(Vx)/1600, Nx, Ny)                          
+                                    obj.damage(slin_bird.max*abs(Vx)/1600, Nx, Ny)   
+                                    if (p_1):
+                                        Score_p1+=(100-obj.health)/20
+                                    else:
+                                        Score_p2+=(100 - obj.health)/20                     
                                     Vx *= -0.7
                             else:
                                 if destroy(slin_bird, Vy, obj):
@@ -257,6 +279,10 @@ while run:
                                     Vy*=1/5
                                 else:
                                     obj.damage(slin_bird.max*abs(Vy)/1000, Nx, Ny)
+                                    if (p_1):
+                                        Score_p1+=(100-obj.health)/20
+                                    else:
+                                        Score_p2+=(100 - obj.health)/20 
                                     Vy *= -0.7
                         else:
                             # Fallback if vectors align perfectly (rare)
@@ -264,6 +290,10 @@ while run:
                                 Vx *= -0.7
                                 Vy *= -0.7
                                 obj.damage(slin_bird.max*abs(Vx)/3200+slin_bird.max*abs(Vy)/2000, Nx, Ny)
+                                if (p_1):
+                                    Score_p1+=(100-obj.health)/20
+                                else:
+                                    Score_p2+=(100 - obj.health)/20 
                         
                         # Set cooldown for this specific object (30 frames = 0.5 seconds at 60fps)
                         slin_bird.object_cooldowns[obj_id] = 15
@@ -279,7 +309,11 @@ while run:
                                     # Bird continues through - don't modify velocity
                                     pass
                                 else:  
-                                    obj.damage(slin_bird.nor*abs(Vx)/1600, Nx, Ny)                          
+                                    obj.damage(slin_bird.nor*abs(Vx)/1600, Nx, Ny)     
+                                    if (p_1):
+                                        Score_p1+=(100-obj.health)/20
+                                    else:
+                                        Score_p2+=(100 - obj.health)/20                      
                                     Vx *= -0.7
                             else:
                                 if destroy(slin_bird, Vy, obj):
@@ -287,6 +321,10 @@ while run:
                                     pass
                                 else:
                                     obj.damage(slin_bird.nor*abs(Vy)/1000, Nx, Ny)
+                                    if (p_1):
+                                        Score_p1+=(100-obj.health)/20
+                                    else:
+                                        Score_p2+=(100 - obj.health)/20 
                                     Vy *= -0.7
                         else:
                             # Fallback if vectors align perfectly (rare)
@@ -294,6 +332,10 @@ while run:
                                 Vx *= -0.7
                                 Vy *= -0.7
                                 obj.damage(slin_bird.nor*abs(Vx)/3200+slin_bird.nor*abs(Vy)/2000, Nx, Ny)
+                                if (p_1):
+                                    Score_p1+=(100-obj.health)/20
+                                else:
+                                    Score_p2+=(100 - obj.health)/20 
                         
                         # Set cooldown for this specific object (30 frames = 0.5 seconds at 60fps)
                         slin_bird.object_cooldowns[obj_id] = 15
@@ -323,6 +365,15 @@ while run:
         # Draw trajectory dots
         if dots_path and slin_bird:
             draw_dots(screen, slin_bird.center[0], slin_bird.center[1], Vx, Vy, 600, 10, 5)
+  
+              
+    text_surface_a = font_s.render(f"{float(Score_p1):.1f}", True, (255,255,255))  # 1 decimal place
+    text_surface_b = font_s.render(f"{float(Score_p2):.1f}", True, (255,255,255))  # 1 decimal place
+    screen.blit(text_surface_a,(Score_p1_x,Score_p1_y))   
+    screen.blit(text_surface_b,(Score_p2_x,Score_p1_y))   
+
+            
+        
     
     pygame.display.update()
 

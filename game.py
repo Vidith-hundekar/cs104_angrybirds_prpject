@@ -136,3 +136,12 @@ dots_path = False
 collide_list=[]
 iscol=False
 
+#score
+Score_p1=0
+Score_p2=0
+
+Score_p1_x=648*Nx
+Score_p1_y=20*Ny
+Score_p2_x=830*Nx
+Score_p2_y=20*Ny
+font_s = pygame.font.SysFont("Arial", 48, italic=True)
