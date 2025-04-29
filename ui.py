@@ -13,15 +13,15 @@ def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event):
 
     # Activate input on mouse click
     if event.type == pygame.MOUSEBUTTONDOWN:
-        if (0.208 * screen_wid < mouse_pos[0] < 0.435 * screen_wid and 0.140 * screen_height < mouse_pos[1] < 0.279 * screen_height):
+        if (320 * Nx < mouse_pos[0] < 690*Ny and 135 * Ny < mouse_pos[1] < 270*Ny):
             active = "p_1"
             A_p1=True
             pygame.key.start_text_input()
-        elif (0.578 * screen_wid < mouse_pos[0] < 0.804 * screen_wid and 0.140 * screen_height < mouse_pos[1] < 0.279 * screen_height):
+        elif (890*Nx < mouse_pos[0] < 1235*Nx and 135 * Ny < mouse_pos[1] < 270*Ny):
             active = "p_2"
             A_p2=True
             pygame.key.start_text_input() 
-        elif(0.423*screen_wid < mouse_pos[0] < 0.599*screen_wid and 0.601*screen_height < mouse_pos[1] < 0.740*screen_height):
+        elif(650*Nx < mouse_pos[0] < 920*Ny and 580*Ny < mouse_pos[1] < 710*Ny):
             ui_status=False
 
     # Handle text input for Player 1

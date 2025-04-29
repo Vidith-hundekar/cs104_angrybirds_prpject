@@ -25,9 +25,10 @@ info = pygame.display.Info()
 x, y = info.current_w, info.current_h
 screen_wid, screen_height = int((9*x/10)), int((9*y/10))
 screen = pygame.display.set_mode((screen_wid, screen_height))
+print(screen_wid,screen_height)
 
 #mul_fac
-Nx,Ny=screen_wid/1536,screen_height/1536
+Nx,Ny=screen_wid/1536,screen_height/960
 
 #scaling and loading background
 background = pygame.image.load('./resources/images/background.png')
