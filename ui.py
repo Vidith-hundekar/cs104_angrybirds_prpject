@@ -1,17 +1,15 @@
 import pygame
-from game import *
+from initialization import *
 
-def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event):
-    screen.blit(ui_image, (0, 0))  # Render the background
+def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event,level):
+    screen.blit(ui_image, (0, 0)) 
     mouse_pos = pygame.mouse.get_pos()
     
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
             run = False
-    # if event.type == pygame.MOUSEBUTTONUP:
-    #     print(pygame.mouse.get_pos())
 
-    # Activate input on mouse click
+    # input on mouse click
     if event.type == pygame.MOUSEBUTTONDOWN:
         if (320 * Nx < mouse_pos[0] < 690*Ny and 135 * Ny < mouse_pos[1] < 270*Ny):
             active = "p_1"
@@ -22,10 +20,11 @@ def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event):
             A_p2=True
             pygame.key.start_text_input() 
         elif(650*Nx < mouse_pos[0] < 920*Ny and 580*Ny < mouse_pos[1] < 710*Ny):
-            if text1 != "" and text2 != "":
+            if (text1 != "" and text2 != ""):
                 ui_status=False
+                level=True
 
-    # Handle text input for Player 1
+    # input for Player 1
     if active == "p_1":
         if event.type == pygame.TEXTINPUT:
             if len(text1) < 10:
@@ -37,7 +36,7 @@ def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event):
                 active = None
                 pygame.key.stop_text_input()
 
-    # Handle text input for Player 2
+    #  input for Player 2
     if active == "p_2":
         if event.type == pygame.TEXTINPUT:
             print(len(text2))
@@ -50,4 +49,4 @@ def enter_names(ui_status, run, active,A_p1,A_p2, text1, text2,event):
                 active = None
                 pygame.key.stop_text_input()
 
-    return ui_status, run, active,A_p1,A_p2, text1, text2
+    return ui_status, run, active,A_p1,A_p2, text1, text2 , level
